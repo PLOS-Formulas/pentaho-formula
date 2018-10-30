@@ -1,0 +1,24 @@
+{% set env_config = salt.grains.filter_by(
+    {
+        'default': {
+                'current_version': '8.1.0',
+                'versions': {
+                    '8.0.0': {
+                        'source': 'https://github.com/prometheus/prometheus/releases/download/v2.0.0/prometheus-2.0.0.linux-amd64.tar.gz',
+                        'source_hash': 'sha256=e12917b25b32980daee0e9cf879d9ec197e2893924bd1574604eb0f550034d46'
+                    },
+                    '8.1.0': {
+                        'source': 'https://github.com/prometheus/prometheus/releases/download/v2.1.0/prometheus-2.1.0.linux-amd64.tar.gz',
+                        'source_hash': 'sha256=f181f619c9a8e0750c1ac940eb00a0881cc50386d896f06f159e9a5b68db60a0'
+                    }
+            	}
+            },
+        'vagrant': {
+        },
+        'dev': {
+               'current_version': '8.1'
+        },
+        'prod': {
+        }
+    }, grain='environment', base='default'
+) %}
