@@ -1,22 +1,53 @@
 {% set env_config = salt.grains.filter_by(
     {
         'default': {
-                'current_version': '8.1.0',
-                'versions': {
-                    '8.0.0': {
-                        'source': 'https://github.com/prometheus/prometheus/releases/download/v2.0.0/prometheus-2.0.0.linux-amd64.tar.gz',
-                        'source_hash': 'sha256=e12917b25b32980daee0e9cf879d9ec197e2893924bd1574604eb0f550034d46'
+            'j_opts': '"-Djava.awt.headless=true -Xmx8192m -XX:-HeapDumpOnOutOfMemoryError -Dsun.net.inetaddr.ttl=30 -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dwombat.configDir=/opt/plos/wombat/conf -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.port=9997 -javaagent:{}=7073:{}/tomcat.yml"',
+            'current_version': '8.1.0.0',
+            'install_loc': '/opt/pentaho',
+            'versions': {
+                '8.1.0.0': {
+                    'pdd-plugin.zip': {
+                         'hash': 'sha256=b7d34af5a041d9f2a963e75ccf8875f92ea64090ba843575764c82a0b75a134b',
+                         'unzip_loc': 'pentaho/server/pentaho-server/pentaho-solutions/system',
+                         'source_loc': 'pdd-plugin.zip'
                     },
-                    '8.1.0': {
-                        'source': 'https://github.com/prometheus/prometheus/releases/download/v2.1.0/prometheus-2.1.0.linux-amd64.tar.gz',
-                        'source_hash': 'sha256=f181f619c9a8e0750c1ac940eb00a0881cc50386d896f06f159e9a5b68db60a0'
-                    }
-            	}
+                    'pir-plugin.zip': {
+                         'hash': 'sha256=2ba9ce44d51d96a61c93948d3bbc304fb6baa43648e88bdebf0043f5ab64121b',
+                         'unzip_loc': 'pentaho/server/pentaho-server/pentaho-solutions/system',
+                         'source_loc': 'pir-plugin.zip'
+                    },
+                    'paz-plugin.zip': {
+                         'hash': 'sha256=930163b0140b6b231377e8cb28e321302270fa4ed30f73d0b0adb4ac8a80232f',
+                         'unzip_loc': 'pentaho/server/pentaho-server/pentaho-solutions/system',
+                         'source_loc': 'paz-plugin.zip'
+                    },
+                    'license-installer.zip': {
+                         'hash': 'sha256=45acc044d7989a339473b77ce43b591b024ead7459dafc3b4da3ed879e958435',
+                         'unzip_loc': 'pentaho/server',	
+                         'source_loc': 'manualserver/license-installer.zip'
+                    },
+                    'jdbc-distribution-utility.zip': {
+                         'hash': 'sha256=6be7558953706a62fc9b8aa465d822408e432b562c29b197d1e3578f2465f901',
+                         'unzip_loc': 'pentaho/server',
+                         'source_loc': 'manualserver/jdbc-distribution-utility.zip'
+                    },
+                    'pentaho-data.zip': {
+                         'hash': 'sha256=add012dce66888df9ec4d7a4b981f12d5458b9ee71d6bb5907b62e449edcdc30',
+                         'unzip_loc': 'pentaho/server/pentaho-server',
+                         'source_loc': 'manualserver/pentaho-data.zip'
+                    },
+                    'pentaho-solutions.zip': {
+                         'hash': 'sha256=3ba4805abb720e0e415e07b6c52e374065209bf3a95912a835ffe66f8681d77d',
+                         'unzip_loc': 'pentaho/server/pentaho-server',
+                         'source_loc': 'manualserver/pentaho-solutions.zip'
+                }
+               }
+              }
             },
         'vagrant': {
         },
         'dev': {
-               'current_version': '8.1'
+               'current_version': '8.1.0'
         },
         'prod': {
         }
