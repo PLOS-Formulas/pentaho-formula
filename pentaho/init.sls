@@ -58,7 +58,7 @@ dir_opt_pentaho:
 #war files
 pentaho_webapp_war:
   file.managed:
-    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/webapps/
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/webapps/pentaho.war
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pentaho.war']['source_loc'] }}
     - source_hash: {{ config['versions'][version]['pentaho.war']['hash'] }}
     - user: pentaho
@@ -69,7 +69,7 @@ pentaho_webapp_war:
 
 pentaho_style_war:
   file.managed:
-    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/webapps/
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/webapps/pentaho-style.war
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pentaho-style.war']['source_loc'] }}
     - source_hash: {{ config['versions'][version]['pentaho-style.war']['hash'] }}
     - user: pentaho
