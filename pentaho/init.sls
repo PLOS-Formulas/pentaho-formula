@@ -4,6 +4,9 @@
 {%- set version = config['current_version'] %}
 {%- set install_loc = config['install_loc'] %}
 {%- set s3_loc = 's3://salt-prod/pentaho' %}
+{%- set mysql_host = 'config['mysql_host'] %}
+{%- set mysql_hibernate_user = config['hibernate']['mysql_user'] %}
+{%- set mysql_hibernate_host = mysql_host %}
 {%- from 'lib/tomcat.sls' import tomcat_user %}
 {{ tomcat_user('pentaho') }}
 
@@ -61,7 +64,7 @@ unzip_solutions:
     - group: pentaho
     - archive_format: zip
 
-unzip_pdd_plugin:
+unzip_pdd_plugin
   archive.extracted:
     - name: {{ install_loc }}/{{ config['versions'][version]['pdd-plugin.zip']['unzip_loc'] }}  
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pdd-plugin.zip']['source_loc'] }} 
@@ -169,7 +172,13 @@ hibernate_specify_db_mysql_cnf_file:
 
 hibernate_db_mysql_cnf_file:
   file.managed:
-    - 
+    - name: {{ install_loc }}/pentaho/server/pentaho-server/pentaho-solutions/system/hibernate/mysql5.hibernate.cfg.xml
+    - template: jinja
+    - source: salt://pentaho/server/pentaho-server/pentaho-solutsions/system/hibernate/mysql5.hibernate.cfg.xml
+    - context: 
+        mysql_hibernate_host: {{ mysql_hibernate_host }}
+        mysql_hibernate_user: {{ mysql_hibernate_user }}
+        mysql_hibernate_pass: {{ salt.pillar.get('secrets:pentaho:mysql:hibernate:password') }}
 
 #pentaho_jmx_exporter:
 #  plos_consul.advertise:

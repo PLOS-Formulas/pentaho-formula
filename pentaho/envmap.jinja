@@ -1,6 +1,11 @@
 {% set env_config = salt.grains.filter_by(
     {
         'default': {
+            'mysql_host': 'localhost',
+            'hibernate': {
+                'mysql_user': 'hib_user'
+            }
+            'mysql_hibernate_user': 'hibuser',
             'j_opts': '"-Djava.awt.headless=true -Xmx8192m -XX:-HeapDumpOnOutOfMemoryError -XX:MaxPermSize=256m -Dsun.net.inetaddr.ttl=30 -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000"',
             'current_version': '8.1.0.0',
             'install_loc': '/opt/pentaho',
@@ -47,9 +52,12 @@
         'vagrant': {
         },
         'dev': {
-               'current_version': '8.1.0'
+               'current_version': '8.1.0.0',
+               'mysql_host': 'db-pentaho-201.soma.plos.org',
         },
         'prod': {
+               'current_version: '8.1.0.0',
+               'mysql_host': 'db-pentaho-101.soma.plos.org',
         }
     }, grain='environment', base='default'
 ) %}

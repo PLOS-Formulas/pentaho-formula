@@ -33,11 +33,11 @@ explicitly covering such access.
   
     <!--  MySQL Configuration -->
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
-    <property name="connection.url">jdbc:mysql://localhost:3306/hibernate</property>
+    <property name="connection.url">jdbc:mysql://{{ mysql_hibernate_host }}:3306/hibernate</property>
     <property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
-    <property name="connection.username">hibuser</property>
-    <property name="connection.password">password</property>
-    <property name="connection.pool_size">10</property>
+    <property name="connection.username">{{ mysql_hibernate_user }}</property>
+    <property name="connection.password">{{ mysql_hibernate_pass }}</property>
+    <property name="connection.pool_size">20</property>
     <property name="show_sql">false</property>
     <property name="hibernate.jdbc.use_streams_for_binary">true</property>
 	
