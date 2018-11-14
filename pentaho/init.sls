@@ -17,6 +17,7 @@ conf_file_init_default:
     - name: /etc/default/pentaho
     - source: salt://pentaho/conf/etc/default/pentaho
     - context:
+        java_loc: "/usr/lib/jvm/java-8-oracle"
         j_opts: |
           {{ config['j_opts'] }}
 
@@ -38,7 +39,7 @@ dir_opt_pentaho:
   file.recurse:
     - template: jinja
     - name: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/
-    - source: salt://pentaho/conf/opt/pentaho
+    - source: salt://pentaho/conf/opt/pentaho/tomcat
     - include_empty: True
     - user: pentaho
     - group: pentaho
@@ -50,35 +51,51 @@ dir_opt_pentaho:
       - file: dir_pentaho_server
 
 #TODO: these unzips should be a simple for loop with .iteritems()
+unzip_solutions:
+  archive.extracted:
+    - name: {{ install_loc }}/{{ config['versions'][version]['pentaho-solutions.zip']['unzip_loc'] }} 
+    - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pentaho-solutions.zip']['source_loc'] }}
+    - source_hash: {{ config['versions'][version]['pentaho-solutions.zip']['hash'] }}
+    - clean: True
+    - user: pentaho
+    - group: pentaho
+    - archive_format: zip
+
 unzip_pdd_plugin:
   archive.extracted:
     - name: {{ install_loc }}/{{ config['versions'][version]['pdd-plugin.zip']['unzip_loc'] }}  
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pdd-plugin.zip']['source_loc'] }} 
     - source_hash: {{ config['versions'][version]['pdd-plugin.zip']['hash'] }}
-    - clean: True
+    - enforce_toplevel: False
     - user: pentaho
     - group: pentaho
     - archive_format: zip
+    - require:
+      - archive: unzip_solutions
 
 unzip_pir_plugin:
   archive.extracted:
     - name: {{ install_loc }}/{{ config['versions'][version]['pir-plugin.zip']['unzip_loc'] }} 
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pir-plugin.zip']['source_loc'] }}
     - source_hash: {{ config['versions'][version]['pir-plugin.zip']['hash'] }}
-    - clean: True
+    - enforce_toplevel: False
     - user: pentaho
     - group: pentaho
     - archive_format: zip
+    - require:
+      - archive: unzip_solutions
 
 unzip_paz_plugin:
   archive.extracted:
     - name: {{ install_loc }}/{{ config['versions'][version]['paz-plugin.zip']['unzip_loc'] }} 
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['paz-plugin.zip']['source_loc'] }}
     - source_hash: {{ config['versions'][version]['paz-plugin.zip']['hash'] }}
-    - clean: True
+    - enforce_toplevel: False
     - user: pentaho
     - group: pentaho
     - archive_format: zip
+    - require:
+      - archive: unzip_solutions
 
 unzip_license_installer:
   archive.extracted:
@@ -110,16 +127,6 @@ unzip_data:
     - group: pentaho
     - archive_format: zip
 
-unzip_solutions:
-  archive.extracted:
-    - name: {{ install_loc }}/{{ config['versions'][version]['pentaho-solutions.zip']['unzip_loc'] }} 
-    - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pentaho-solutions.zip']['source_loc'] }}
-    - source_hash: {{ config['versions'][version]['pentaho-solutions.zip']['hash'] }}
-    - clean: True
-    - user: pentaho
-    - group: pentaho
-    - archive_format: zip
-
 symlink_current_pentaho_version:
   file.symlink:
     - name: {{ install_loc }}/pentaho
@@ -131,7 +138,38 @@ restart_for_pentaho_configs:
   cmd.run:
     - name: service pentaho restart
     - onchanges:
-      - file: {{ install_loc }}/conf/*
+      - file: {{ install_loc }}/pentaho/server/pentaho-server/tomcat/conf/*
+
+#apparently pentaho needs xvfb to generate charts and stuff 
+pentaho_required_xvfb:
+  pkg.latest:
+    - name: xvfb
+
+# configuration changes for mysql backing
+quartz_db_mysql_jobstore_driver:
+  file.line:
+    - name: {{ install_loc }}/pentaho/server/pentaho-server/pentaho-solutions/system/quartz/quartz.properties
+    - content: org.quartz.jobStore.driverDelegateClass = org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+    - match: org.quartz.jobStore.driverDelegateClass = org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+    - mode: replace
+    - user: pentaho
+    - group: pentaho
+    - file_mode: 664 
+
+hibernate_specify_db_mysql_cnf_file:
+  file.line:
+    - name: {{ install_loc }}/pentaho/server/pentaho-server/pentaho-solutions/system/hibernate/hibernate-settings.xml
+    - content: <config-file>system/hibernate/mysql5.hibernate.cfg.xml</config-file>
+    - match: <config-file>system/hibernate/postgresql.hibernate.cfg.xml</config-file>
+    - mode: replace
+    - indent: True
+    - user: pentaho
+    - group: pentaho
+    - file_mode: 644 
+
+hibernate_db_mysql_cnf_file:
+  file.managed:
+    - 
 
 #pentaho_jmx_exporter:
 #  plos_consul.advertise:

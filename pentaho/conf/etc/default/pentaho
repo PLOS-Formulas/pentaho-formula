@@ -1,1 +1,2 @@
 JAVA_OPTS={{ j_opts }}
+PENTAHO_JAVA_HOME={{ java_loc }}
