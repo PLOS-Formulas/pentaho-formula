@@ -4,9 +4,11 @@
 {%- set version = config['current_version'] %}
 {%- set install_loc = config['install_loc'] %}
 {%- set s3_loc = 's3://salt-prod/pentaho' %}
-{%- set mysql_host = 'config['mysql_host'] %}
-{%- set mysql_hibernate_user = config['hibernate']['mysql_user'] %}
+{%- set mysql_host = config['mysql_host'] %}
 {%- set mysql_hibernate_host = mysql_host %}
+{%- set mysql_jcr_host = mysql_host %}
+{%- set mysql_hibernate_user = config['hibernate']['mysql_user'] %}
+{%- set mysql_jcr_user = config['jackrabbit']['mysql_user'] %}
 {%- from 'lib/tomcat.sls' import tomcat_user %}
 {{ tomcat_user('pentaho') }}
 
@@ -42,7 +44,7 @@ dir_opt_pentaho:
   file.recurse:
     - template: jinja
     - name: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/
-    - source: salt://pentaho/conf/opt/pentaho/tomcat
+    - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/tomcat
     - include_empty: True
     - user: pentaho
     - group: pentaho
@@ -52,6 +54,29 @@ dir_opt_pentaho:
     - replace: False # this means any changes are not replaced! you have to delete the file for salt to recreate the file
     - require:
       - file: dir_pentaho_server
+
+#war files
+pentaho_webapp_war:
+  file.managed:
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/webapps/
+    - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pentaho.war']['source_loc'] }}
+    - source_hash: {{ config['versions'][version]['pentaho.war']['hash'] }}
+    - user: pentaho
+    - group: pentaho
+    - mode: 644
+    - require:
+      - file: dir_opt_pentaho
+
+pentaho_style_war:
+  file.managed:
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/webapps/
+    - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pentaho-style.war']['source_loc'] }}
+    - source_hash: {{ config['versions'][version]['pentaho-style.war']['hash'] }}
+    - user: pentaho
+    - group: pentaho
+    - mode: 644
+    - require:
+      - file: dir_opt_pentaho
 
 #TODO: these unzips should be a simple for loop with .iteritems()
 unzip_solutions:
@@ -64,7 +89,7 @@ unzip_solutions:
     - group: pentaho
     - archive_format: zip
 
-unzip_pdd_plugin
+unzip_pdd_plugin:
   archive.extracted:
     - name: {{ install_loc }}/{{ config['versions'][version]['pdd-plugin.zip']['unzip_loc'] }}  
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pdd-plugin.zip']['source_loc'] }} 
@@ -148,7 +173,7 @@ pentaho_required_xvfb:
   pkg.latest:
     - name: xvfb
 
-# configuration changes for mysql backing
+# configuration changes for mysql backing https://help.pentaho.com/Documentation/8.1/Setup/Installation/Manual/MySQL_Repository
 quartz_db_mysql_jobstore_driver:
   file.line:
     - name: {{ install_loc }}/pentaho/server/pentaho-server/pentaho-solutions/system/quartz/quartz.properties
@@ -158,6 +183,8 @@ quartz_db_mysql_jobstore_driver:
     - user: pentaho
     - group: pentaho
     - file_mode: 664 
+    - require:
+      - archive: unzip_solutions
 
 hibernate_specify_db_mysql_cnf_file:
   file.line:
@@ -169,16 +196,55 @@ hibernate_specify_db_mysql_cnf_file:
     - user: pentaho
     - group: pentaho
     - file_mode: 644 
+    - require:
+      - archive: unzip_solutions
 
 hibernate_db_mysql_cnf_file:
   file.managed:
     - name: {{ install_loc }}/pentaho/server/pentaho-server/pentaho-solutions/system/hibernate/mysql5.hibernate.cfg.xml
     - template: jinja
-    - source: salt://pentaho/server/pentaho-server/pentaho-solutsions/system/hibernate/mysql5.hibernate.cfg.xml
+    - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/pentaho-solutions/system/hibernate/mysql5.hibernate.cfg.xml
+    - require:
+      - archive: unzip_solutions
     - context: 
         mysql_hibernate_host: {{ mysql_hibernate_host }}
         mysql_hibernate_user: {{ mysql_hibernate_user }}
-        mysql_hibernate_pass: {{ salt.pillar.get('secrets:pentaho:mysql:hibernate:password') }}
+        mysql_hibernate_pass: {{ salt.pillar.get('secrets:pentaho:hibernate:mysql:password') }}
+
+audit_sql_cp:
+  file.managed:
+    - name: {{ install_loc }}/pentaho/server/pentaho-server/pentaho-solutions/system/audit_sql.xml
+    - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/pentaho-solutions/system/audit_sql.xml
+    - user: pentaho
+    - group: pentaho
+    - mode: 664
+    - require:
+      - archive: unzip_solutions
+
+jackrabbit_repository_mysql_config:
+  file.managed:
+    - name: {{ install_loc }}/pentaho/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository.xml
+    - template: jinja
+    - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository.xml
+    - user: pentaho
+    - group: pentaho
+    - mode: 664
+    - require:
+      - archive: unzip_solutions
+    - context:
+        mysql_jcr_host: {{ mysql_jcr_host }}
+        mysql_jcr_user: {{ mysql_jcr_user }}
+        mysql_jcr_password: {{ salt.pillar.get('secrets:pentaho:jcr:mysql:password') }}
+
+#jdbc driver
+jdbc_driver:
+  file.symlink:
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/lib/mysql-connector-java.jar
+    - target: /usr/share/java/mysql-connector-java.jar
+    - force: True
+    - require:
+      - pkg: plos-tomcat8-packages
+
 
 #pentaho_jmx_exporter:
 #  plos_consul.advertise:

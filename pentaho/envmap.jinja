@@ -4,8 +4,10 @@
             'mysql_host': 'localhost',
             'hibernate': {
                 'mysql_user': 'hib_user'
-            }
-            'mysql_hibernate_user': 'hibuser',
+            },
+            'jackrabbit': {
+                'mysql_user': 'jcr_user'
+            },
             'j_opts': '"-Djava.awt.headless=true -Xmx8192m -XX:-HeapDumpOnOutOfMemoryError -XX:MaxPermSize=256m -Dsun.net.inetaddr.ttl=30 -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000"',
             'current_version': '8.1.0.0',
             'install_loc': '/opt/pentaho',
@@ -45,7 +47,15 @@
                          'hash': 'sha256=3ba4805abb720e0e415e07b6c52e374065209bf3a95912a835ffe66f8681d77d',
                          'unzip_loc': 'pentaho/server/pentaho-server',
                          'source_loc': 'manualserver/pentaho-solutions.zip'
-                }
+                    },
+                    'pentaho.war': {
+                         'hash': 'sha256=f552a5814c8f9c379c3ad40b706352b73a368b26d9b2f87f8e5af64877e8c271',
+                         'source_loc': 'manualserver/pentaho.war'
+                    }
+                    'pentaho-style.war': {
+                         'hash': 'sha256=ea5ead9016c0f650dfebf871e1bb6658db5d774fa0e2a29466d5b29b10978b5b',
+                         'source_loc': 'manualserver/pentaho-style.war'
+                    }
                }
               }
             },
@@ -56,7 +66,7 @@
                'mysql_host': 'db-pentaho-201.soma.plos.org',
         },
         'prod': {
-               'current_version: '8.1.0.0',
+               'current_version': '8.1.0.0',
                'mysql_host': 'db-pentaho-101.soma.plos.org',
         }
     }, grain='environment', base='default'
