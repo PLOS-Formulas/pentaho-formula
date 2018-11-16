@@ -22,6 +22,8 @@ conf_file_init_default:
     - name: /etc/default/pentaho
     - source: salt://pentaho/conf/etc/default/pentaho
     - context:
+        pentaho_license_path: {{ install_loc }}/{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }} 
+        di_home: {{ install_loc }}/pentaho/pentaho/server/pentaho-server/pentaho-solutions/system/kettle
         java_loc: "/usr/lib/jvm/java-8-oracle"
         j_opts: |
           {{ config['j_opts'] }}
@@ -54,6 +56,10 @@ dir_opt_pentaho:
     - replace: False # this means any changes are not replaced! you have to delete the file for salt to recreate the file
     - require:
       - file: dir_pentaho_server
+    - context:
+        mysql_hibernate_host: {{ mysql_hibernate_host }}
+        mysql_hibernate_user: {{ mysql_hibernate_user }}
+        mysql_hibernate_password: {{ salt.pillar.get('secrets:pentaho:hibernate:mysql:password') }}
 
 #war files
 pentaho_webapp_war:
@@ -209,7 +215,7 @@ hibernate_db_mysql_cnf_file:
     - context: 
         mysql_hibernate_host: {{ mysql_hibernate_host }}
         mysql_hibernate_user: {{ mysql_hibernate_user }}
-        mysql_hibernate_pass: {{ salt.pillar.get('secrets:pentaho:hibernate:mysql:password') }}
+        mysql_hibernate_password: {{ salt.pillar.get('secrets:pentaho:hibernate:mysql:password') }}
 
 audit_sql_cp:
   file.managed:
@@ -242,9 +248,21 @@ jdbc_driver:
     - name: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/lib/mysql-connector-java.jar
     - target: /usr/share/java/mysql-connector-java.jar
     - force: True
+    - user: pentaho
+    - group: pentaho
+    - mode: 644
     - require:
-      - pkg: plos-tomcat8-packages
+      - file: dir_opt_pentaho
 
+# init script
+pentaho_tomcat_private_instance_init:
+  file.managed:
+    - name: /etc/init.d/pentaho
+    - source: salt://pentaho/conf/etc/init.d/pentaho
+    - user: root
+    - group: root
+    - mode: 755
+    
 
 #pentaho_jmx_exporter:
 #  plos_consul.advertise:

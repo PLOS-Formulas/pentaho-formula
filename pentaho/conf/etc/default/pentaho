@@ -1,2 +1,4 @@
 JAVA_OPTS={{ j_opts }}
 PENTAHO_JAVA_HOME={{ java_loc }}
+PENTAHO_INSTALLED_LICENSE_PATH={{ pentaho_license_path }}
+DI_HOME={{ di_home }}
