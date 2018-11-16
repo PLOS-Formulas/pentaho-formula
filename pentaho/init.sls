@@ -258,10 +258,13 @@ jdbc_driver:
 pentaho_tomcat_private_instance_init:
   file.managed:
     - name: /etc/init.d/pentaho
+    - template: jinja
     - source: salt://pentaho/conf/etc/init.d/pentaho
     - user: root
     - group: root
     - mode: 755
+    - context:
+        install_loc: {{ install_loc }}
     
 
 #pentaho_jmx_exporter:
