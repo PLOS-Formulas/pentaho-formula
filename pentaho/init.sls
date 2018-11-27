@@ -16,17 +16,17 @@ include:
   - tomcat8-libs
   - prometheus.exporters.jmx
 
-conf_file_init_default:
-  file.managed:
-    - template: jinja
-    - name: /etc/default/pentaho
-    - source: salt://pentaho/conf/etc/default/pentaho
-    - context:
-        pentaho_license_path: {{ install_loc }}/{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }} 
-        di_home: {{ install_loc }}/pentaho/pentaho/server/pentaho-server/pentaho-solutions/system/kettle
-        java_loc: "/usr/lib/jvm/java-8-oracle"
-        j_opts: |
-          {{ config['j_opts'] }}
+#conf_file_init_default:
+#  file.managed:
+#    - template: jinja
+##    - name: /etc/default/pentaho
+#    - source: salt://pentaho/conf/etc/default/pentaho
+#    - context:
+#        pentaho_license_path: {{ install_loc }}/{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }} 
+##        di_home: {{ install_loc }}/pentaho/pentaho/server/pentaho-server/pentaho-solutions/system/kettle
+#        java_loc: "/usr/lib/jvm/java-8-oracle"
+#        j_opts: |
+#          {{ config['j_opts'] }}
 
 dir_pentaho_dot:
   file.directory:
@@ -42,7 +42,7 @@ dir_pentaho_server:
     - user: pentaho
     - group: pentaho
 
-dir_opt_pentaho:
+dir_opt_pentaho_tomcat:
   file.recurse:
     - template: jinja
     - name: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/
@@ -71,7 +71,7 @@ pentaho_webapp_war:
     - group: pentaho
     - mode: 644
     - require:
-      - file: dir_opt_pentaho
+      - file: dir_opt_pentaho_tomcat
 
 pentaho_style_war:
   file.managed:
@@ -82,7 +82,7 @@ pentaho_style_war:
     - group: pentaho
     - mode: 644
     - require:
-      - file: dir_opt_pentaho
+      - file: dir_opt_pentaho_tomcat
 
 #TODO: these unzips should be a simple for loop with .iteritems()
 unzip_solutions:
@@ -172,7 +172,7 @@ restart_for_pentaho_configs:
   cmd.run:
     - name: service pentaho restart
     - onchanges:
-      - file: {{ install_loc }}/pentaho/server/pentaho-server/tomcat/conf/*
+      - file: dir_opt_pentaho_tomcat
 
 #apparently pentaho needs xvfb to generate charts and stuff 
 pentaho_required_xvfb:
@@ -252,7 +252,7 @@ jdbc_driver:
     - group: pentaho
     - mode: 644
     - require:
-      - file: dir_opt_pentaho
+      - file: dir_opt_pentaho_tomcat
 
 # init script
 pentaho_tomcat_private_instance_init:
@@ -265,6 +265,12 @@ pentaho_tomcat_private_instance_init:
     - mode: 755
     - context:
         install_loc: {{ install_loc }}
+        pentaho_license_path: {{ install_loc }}/{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }}
+        di_home: {{ install_loc }}/pentaho/pentaho/server/pentaho-server/pentaho-solutions/system/kettle
+        java_loc: "/usr/lib/jvm/java-8-oracle"
+        j_opts: |
+          {{ config['j_opts'] }}
+
     
 
 #pentaho_jmx_exporter:

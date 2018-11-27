@@ -1,4 +1,8 @@
+{%- from "pentaho/envmap.jinja" import env_config as config with context %}
 {%- set environment = salt.grains.get('environment') %}
+{%- set mysql_hibernate_user = config['hibernate']['mysql_user'] %}
+{%- set mysql_jcr_user = config['jackrabbit']['mysql_user'] %}
+
 include:
   - percona.common
   - common.repos
@@ -17,28 +21,28 @@ jcr_db:
   mysql_database.present:
     - name: jackrabbit
   mysql_user.present:
-    - name: 'jcr_user'
+    - name: '{{ mysql_jcr_user }}'
     - host: {{ mysql_ip }}
     - password: {{ pillar['secrets']['pentaho']['jcr']['mysql']['password'] }}
   mysql_grants.present:
     - database: jackrabbit.*
     - grant: ALL PRIVILEGES
     - host: {{ mysql_ip }}
-    - user: jcr_user
+    - user: {{ mysql_jcr_user }}
 
 # replacement instead of running the create_repository_mysql.sql (https://help.pentaho.com/Documentation/8.1/Setup/Installation/Manual/MySQL_Repository)
 repository_db:
   mysql_database.present:
     - name: hibernate
   mysql_user.present:
-    - name: 'hibuser'
+    - name: '{{ mysql_hibernate_user }}'
     - host: {{ mysql_ip }}
     - password: {{ pillar['secrets']['pentaho']['hibernate']['mysql']['password'] }}
   mysql_grants.present:
-    - database: hibernate.*
+    - database: quartz.*
     - grant: ALL PRIVILEGES
     - host: {{ mysql_ip }}
-    - user: hibuser
+    - user: {{ mysql_hibernate_user }}
 
 # running the non table creation parts from create_quartz_mysql.sql (https://help.pentaho.com/Documentation/8.1/Setup/Installation/Manual/MySQL_Repository)
 quartz_db:
@@ -53,6 +57,13 @@ quartz_db:
     - grant: ALL PRIVILEGES
     - host: {{ mysql_ip }}
     - user: pentaho_user
+
+quartz_hib_grant:
+  mysql_grants.present:
+    - database: quartz.*
+    - grant: ALL PRIVILEGES
+    - host: {{ mysql_ip }}
+    - user: {{ mysql_hibernate_user }}
 
 # running the table creations for quartz database
 mk_QRTZ5_JOB_DETAILS_tbl:
