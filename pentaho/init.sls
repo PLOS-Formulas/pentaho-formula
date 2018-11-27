@@ -87,7 +87,7 @@ pentaho_style_war:
 #TODO: these unzips should be a simple for loop with .iteritems()
 unzip_solutions:
   archive.extracted:
-    - name: {{ install_loc }}/{{ version }}{{ config['versions'][version]['pentaho-solutions.zip']['unzip_loc'] }} 
+    - name: {{ install_loc }}/{{ version }}/{{ config['versions'][version]['pentaho-solutions.zip']['unzip_loc'] }} 
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pentaho-solutions.zip']['source_loc'] }}
     - source_hash: {{ config['versions'][version]['pentaho-solutions.zip']['hash'] }}
     - clean: True
@@ -97,7 +97,7 @@ unzip_solutions:
 
 unzip_pdd_plugin:
   archive.extracted:
-    - name: {{ install_loc }}/{{ version }}{{ config['versions'][version]['pdd-plugin.zip']['unzip_loc'] }}  
+    - name: {{ install_loc }}/{{ version }}/{{ config['versions'][version]['pdd-plugin.zip']['unzip_loc'] }}  
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pdd-plugin.zip']['source_loc'] }} 
     - source_hash: {{ config['versions'][version]['pdd-plugin.zip']['hash'] }}
     - enforce_toplevel: False
@@ -109,7 +109,7 @@ unzip_pdd_plugin:
 
 unzip_pir_plugin:
   archive.extracted:
-    - name: {{ install_loc }}/{{ version }}{{ config['versions'][version]['pir-plugin.zip']['unzip_loc'] }} 
+    - name: {{ install_loc }}/{{ version }}/{{ config['versions'][version]['pir-plugin.zip']['unzip_loc'] }} 
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pir-plugin.zip']['source_loc'] }}
     - source_hash: {{ config['versions'][version]['pir-plugin.zip']['hash'] }}
     - enforce_toplevel: False
@@ -121,7 +121,7 @@ unzip_pir_plugin:
 
 unzip_paz_plugin:
   archive.extracted:
-    - name: {{ install_loc }}/{{ version }}{{ config['versions'][version]['paz-plugin.zip']['unzip_loc'] }} 
+    - name: {{ install_loc }}/{{ version }}/{{ config['versions'][version]['paz-plugin.zip']['unzip_loc'] }} 
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['paz-plugin.zip']['source_loc'] }}
     - source_hash: {{ config['versions'][version]['paz-plugin.zip']['hash'] }}
     - enforce_toplevel: False
@@ -133,7 +133,7 @@ unzip_paz_plugin:
 
 unzip_license_installer:
   archive.extracted:
-    - name: {{ install_loc }}/{{ version }}{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }} 
+    - name: {{ install_loc }}/{{ version }}/{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }} 
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['license-installer.zip']['source_loc'] }}
     - source_hash: {{ config['versions'][version]['license-installer.zip']['hash'] }}
     - clean: True
@@ -143,7 +143,7 @@ unzip_license_installer:
 
 unzip_jdbc_utility:
   archive.extracted:
-    - name: {{ install_loc }}/{{ version }}{{ config['versions'][version]['jdbc-distribution-utility.zip']['unzip_loc'] }}
+    - name: {{ install_loc }}/{{ version }}/{{ config['versions'][version]['jdbc-distribution-utility.zip']['unzip_loc'] }}
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['jdbc-distribution-utility.zip']['source_loc'] }}
     - source_hash: {{ config['versions'][version]['jdbc-distribution-utility.zip']['hash'] }}
     - clean: True
@@ -153,7 +153,7 @@ unzip_jdbc_utility:
 
 unzip_data:
   archive.extracted:
-    - name: {{ install_loc }}/{{ version }}{{ config['versions'][version]['pentaho-data.zip']['unzip_loc'] }} 
+    - name: {{ install_loc }}/{{ version }}/{{ config['versions'][version]['pentaho-data.zip']['unzip_loc'] }} 
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pentaho-data.zip']['source_loc'] }}
     - source_hash: {{ config['versions'][version]['pentaho-data.zip']['hash'] }}
     - clean: True
