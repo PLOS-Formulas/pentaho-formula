@@ -87,7 +87,7 @@ pentaho_style_war:
 #TODO: these unzips should be a simple for loop with .iteritems()
 unzip_solutions:
   archive.extracted:
-    - name: {{ install_loc }}/{{ config['versions'][version]['pentaho-solutions.zip']['unzip_loc'] }} 
+    - name: {{ install_loc }}/{{ version }}{{ config['versions'][version]['pentaho-solutions.zip']['unzip_loc'] }} 
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pentaho-solutions.zip']['source_loc'] }}
     - source_hash: {{ config['versions'][version]['pentaho-solutions.zip']['hash'] }}
     - clean: True
@@ -97,7 +97,7 @@ unzip_solutions:
 
 unzip_pdd_plugin:
   archive.extracted:
-    - name: {{ install_loc }}/{{ config['versions'][version]['pdd-plugin.zip']['unzip_loc'] }}  
+    - name: {{ install_loc }}/{{ version }}{{ config['versions'][version]['pdd-plugin.zip']['unzip_loc'] }}  
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pdd-plugin.zip']['source_loc'] }} 
     - source_hash: {{ config['versions'][version]['pdd-plugin.zip']['hash'] }}
     - enforce_toplevel: False
@@ -109,7 +109,7 @@ unzip_pdd_plugin:
 
 unzip_pir_plugin:
   archive.extracted:
-    - name: {{ install_loc }}/{{ config['versions'][version]['pir-plugin.zip']['unzip_loc'] }} 
+    - name: {{ install_loc }}/{{ version }}{{ config['versions'][version]['pir-plugin.zip']['unzip_loc'] }} 
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pir-plugin.zip']['source_loc'] }}
     - source_hash: {{ config['versions'][version]['pir-plugin.zip']['hash'] }}
     - enforce_toplevel: False
@@ -121,7 +121,7 @@ unzip_pir_plugin:
 
 unzip_paz_plugin:
   archive.extracted:
-    - name: {{ install_loc }}/{{ config['versions'][version]['paz-plugin.zip']['unzip_loc'] }} 
+    - name: {{ install_loc }}/{{ version }}{{ config['versions'][version]['paz-plugin.zip']['unzip_loc'] }} 
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['paz-plugin.zip']['source_loc'] }}
     - source_hash: {{ config['versions'][version]['paz-plugin.zip']['hash'] }}
     - enforce_toplevel: False
@@ -133,7 +133,7 @@ unzip_paz_plugin:
 
 unzip_license_installer:
   archive.extracted:
-    - name: {{ install_loc }}/{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }} 
+    - name: {{ install_loc }}/{{ version }}{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }} 
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['license-installer.zip']['source_loc'] }}
     - source_hash: {{ config['versions'][version]['license-installer.zip']['hash'] }}
     - clean: True
@@ -143,7 +143,7 @@ unzip_license_installer:
 
 unzip_jdbc_utility:
   archive.extracted:
-    - name: {{ install_loc }}/{{ config['versions'][version]['jdbc-distribution-utility.zip']['unzip_loc'] }}
+    - name: {{ install_loc }}/{{ version }}{{ config['versions'][version]['jdbc-distribution-utility.zip']['unzip_loc'] }}
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['jdbc-distribution-utility.zip']['source_loc'] }}
     - source_hash: {{ config['versions'][version]['jdbc-distribution-utility.zip']['hash'] }}
     - clean: True
@@ -153,7 +153,7 @@ unzip_jdbc_utility:
 
 unzip_data:
   archive.extracted:
-    - name: {{ install_loc }}/{{ config['versions'][version]['pentaho-data.zip']['unzip_loc'] }} 
+    - name: {{ install_loc }}/{{ version }}{{ config['versions'][version]['pentaho-data.zip']['unzip_loc'] }} 
     - source: {{ s3_loc }}/{{ version }}/{{ config['versions'][version]['pentaho-data.zip']['source_loc'] }}
     - source_hash: {{ config['versions'][version]['pentaho-data.zip']['hash'] }}
     - clean: True
@@ -182,7 +182,7 @@ pentaho_required_xvfb:
 # configuration changes for mysql backing https://help.pentaho.com/Documentation/8.1/Setup/Installation/Manual/MySQL_Repository
 quartz_db_mysql_jobstore_driver:
   file.line:
-    - name: {{ install_loc }}/pentaho/server/pentaho-server/pentaho-solutions/system/quartz/quartz.properties
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/pentaho-solutions/system/quartz/quartz.properties
     - content: org.quartz.jobStore.driverDelegateClass = org.quartz.impl.jdbcjobstore.StdJDBCDelegate
     - match: org.quartz.jobStore.driverDelegateClass = org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
     - mode: replace
@@ -194,7 +194,7 @@ quartz_db_mysql_jobstore_driver:
 
 hibernate_specify_db_mysql_cnf_file:
   file.line:
-    - name: {{ install_loc }}/pentaho/server/pentaho-server/pentaho-solutions/system/hibernate/hibernate-settings.xml
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/pentaho-solutions/system/hibernate/hibernate-settings.xml
     - content: <config-file>system/hibernate/mysql5.hibernate.cfg.xml</config-file>
     - match: <config-file>system/hibernate/postgresql.hibernate.cfg.xml</config-file>
     - mode: replace
@@ -207,7 +207,7 @@ hibernate_specify_db_mysql_cnf_file:
 
 hibernate_db_mysql_cnf_file:
   file.managed:
-    - name: {{ install_loc }}/pentaho/server/pentaho-server/pentaho-solutions/system/hibernate/mysql5.hibernate.cfg.xml
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/pentaho-solutions/system/hibernate/mysql5.hibernate.cfg.xml
     - template: jinja
     - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/pentaho-solutions/system/hibernate/mysql5.hibernate.cfg.xml
     - require:
@@ -219,7 +219,7 @@ hibernate_db_mysql_cnf_file:
 
 audit_sql_cp:
   file.managed:
-    - name: {{ install_loc }}/pentaho/server/pentaho-server/pentaho-solutions/system/audit_sql.xml
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/pentaho-solutions/system/audit_sql.xml
     - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/pentaho-solutions/system/audit_sql.xml
     - user: pentaho
     - group: pentaho
@@ -229,7 +229,7 @@ audit_sql_cp:
 
 jackrabbit_repository_mysql_config:
   file.managed:
-    - name: {{ install_loc }}/pentaho/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository.xml
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository.xml
     - template: jinja
     - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository.xml
     - user: pentaho
