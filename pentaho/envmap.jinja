@@ -1,23 +1,30 @@
 {% set env_config = salt.grains.filter_by(
     {
         'default': {
-            'j_opts': '"-Djava.awt.headless=true -Xmx8192m -XX:-HeapDumpOnOutOfMemoryError -Dsun.net.inetaddr.ttl=30 -Dorg.apache.tomcat.util.buf.UDecoder.ALLOW_ENCODED_SLASH=true -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dwombat.configDir=/opt/plos/wombat/conf -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.port=9997 -javaagent:{}=7073:{}/tomcat.yml"',
+            'mysql_host': 'localhost',
+            'hibernate': {
+                'mysql_user': 'hib_user'
+            },
+            'jackrabbit': {
+                'mysql_user': 'jcr_user'
+            },
+            'j_opts': '"-Djava.awt.headless=true -Xmx8192m -XX:-HeapDumpOnOutOfMemoryError -XX:MaxPermSize=256m -Dsun.net.inetaddr.ttl=30 -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Dpentaho.installed.licenses.file=$PENTAHO_INSTALLED_LICENSE_PATH -DDI_HOME=$DI_HOME"',
             'current_version': '8.1.0.0',
             'install_loc': '/opt/pentaho',
             'versions': {
                 '8.1.0.0': {
                     'pdd-plugin.zip': {
-                         'hash': 'sha256=b7d34af5a041d9f2a963e75ccf8875f92ea64090ba843575764c82a0b75a134b',
+                         'hash': 'sha256=7a24341260e51ce8d08481de52e5773cab6c63854f860571ec7d8c7fafdf0d6d',
                          'unzip_loc': 'pentaho/server/pentaho-server/pentaho-solutions/system',
                          'source_loc': 'pdd-plugin.zip'
                     },
                     'pir-plugin.zip': {
-                         'hash': 'sha256=2ba9ce44d51d96a61c93948d3bbc304fb6baa43648e88bdebf0043f5ab64121b',
+                         'hash': 'sha256=23485cc9ca2c9ceed4d938ab883d4f6d10e6f919457bf2ca1d290ab41a375cee',
                          'unzip_loc': 'pentaho/server/pentaho-server/pentaho-solutions/system',
                          'source_loc': 'pir-plugin.zip'
                     },
                     'paz-plugin.zip': {
-                         'hash': 'sha256=930163b0140b6b231377e8cb28e321302270fa4ed30f73d0b0adb4ac8a80232f',
+                         'hash': 'sha256=9ad8088314fdd0caeeb3027aaa17926879befa22ed92ee992bff02cc14b683b1',
                          'unzip_loc': 'pentaho/server/pentaho-server/pentaho-solutions/system',
                          'source_loc': 'paz-plugin.zip'
                     },
@@ -40,16 +47,29 @@
                          'hash': 'sha256=3ba4805abb720e0e415e07b6c52e374065209bf3a95912a835ffe66f8681d77d',
                          'unzip_loc': 'pentaho/server/pentaho-server',
                          'source_loc': 'manualserver/pentaho-solutions.zip'
-                }
+                    },
+                    'pentaho.war': {
+                         'hash': 'sha256=f552a5814c8f9c379c3ad40b706352b73a368b26d9b2f87f8e5af64877e8c271',
+                         'source_loc': 'manualserver/pentaho.war'
+                    },
+                    'pentaho-style.war': {
+                         'hash': 'sha256=ea5ead9016c0f650dfebf871e1bb6658db5d774fa0e2a29466d5b29b10978b5b',
+                         'source_loc': 'manualserver/pentaho-style.war'
+                    }
                }
               }
             },
         'vagrant': {
+               'current_version': '8.1.0.0',
+               'mysql_host': 'pentaho-901.vagrant.local'
         },
         'dev': {
-               'current_version': '8.1.0'
+               'current_version': '8.1.0.0',
+               'mysql_host': 'db-pentaho-201.soma.plos.org',
         },
         'prod': {
+               'current_version': '8.1.0.0',
+               'mysql_host': 'db-pentaho-101.soma.plos.org',
         }
     }, grain='environment', base='default'
 ) %}
