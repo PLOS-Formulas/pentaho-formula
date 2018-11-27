@@ -266,7 +266,7 @@ pentaho_tomcat_private_instance_init:
     - context:
         install_loc: {{ install_loc }}
         pentaho_license_path: {{ install_loc }}/{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }}
-        di_home: {{ install_loc }}/pentaho/pentaho/server/pentaho-server/pentaho-solutions/system/kettle
+        di_home: {{ install_loc }}/{{ version }}/server/pentaho-server/pentaho-solutions/system/kettle
         java_loc: "/usr/lib/jvm/java-8-oracle"
         j_opts: |
           {{ config['j_opts'] }}

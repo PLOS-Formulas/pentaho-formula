@@ -39,7 +39,7 @@ repository_db:
     - host: {{ mysql_ip }}
     - password: {{ pillar['secrets']['pentaho']['hibernate']['mysql']['password'] }}
   mysql_grants.present:
-    - database: quartz.*
+    - database: hibernate.*
     - grant: ALL PRIVILEGES
     - host: {{ mysql_ip }}
     - user: {{ mysql_hibernate_user }}
