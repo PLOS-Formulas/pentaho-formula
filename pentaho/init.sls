@@ -22,7 +22,7 @@ include:
 ##    - name: /etc/default/pentaho
 #    - source: salt://pentaho/conf/etc/default/pentaho
 #    - context:
-#        pentaho_license_path: {{ install_loc }}/{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }} 
+#        pentaho_license_path: {{ install_loc }}/{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }}/.installedLicenses.xml
 ##        di_home: {{ install_loc }}/pentaho/pentaho/server/pentaho-server/pentaho-solutions/system/kettle
 #        java_loc: "/usr/lib/jvm/java-8-oracle"
 #        j_opts: |
@@ -265,7 +265,7 @@ pentaho_tomcat_private_instance_init:
     - mode: 755
     - context:
         install_loc: {{ install_loc }}
-        pentaho_license_path: {{ install_loc }}/{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }}
+        pentaho_license_path: {{ install_loc }}/{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }}/.installedLicenses.xml
         di_home: {{ install_loc }}/{{ version }}/server/pentaho-server/pentaho-solutions/system/kettle
         java_loc: "/usr/lib/jvm/java-8-oracle"
         j_opts: |
