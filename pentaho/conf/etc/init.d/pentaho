@@ -29,10 +29,10 @@ PATH=/bin:/usr/bin:/sbin:/usr/sbin
 DESC="Tomcat $NAME servlet engine"
 DEFAULT=/etc/default/$NAME
 JVM_TMP=/tmp/tomcat8-$NAME-tmp
-JAVA_OPTS={{ j_opts }}
 PENTAHO_JAVA_HOME={{ java_loc }}
 PENTAHO_INSTALLED_LICENSE_PATH={{ pentaho_license_path }}
 DI_HOME={{ di_home }}
+JAVA_OPTS={{ j_opts }}
 
 if [ `id -u` -ne 0 ]; then
 	echo "You need root privileges to run this script"
