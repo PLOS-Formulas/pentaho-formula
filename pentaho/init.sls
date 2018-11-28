@@ -273,16 +273,12 @@ pentaho_tomcat_private_instance_init:
 
 # GRRR TODO: figure out how to remove hsql listener from WEB-INF/web.xml, until then we have to add the hsql jar file so pentaho imports/post licensing doesnt fail
 hsqldb_jar_download:
-  archive.extracted:
-    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/lib
-    - source: https://sourceforge.net/projects/hsqldb/files/hsqldb/hsqldb_2_4/hsqldb-2.4.1.zip
-    - source_hash: sha1=207a2adc299755220036e579e33126eef3d51946
-    - options: hsqldb-2.4.1/hsqldb/lib/hsqldb.jar -j
-    - use_cmd_unzip: True
-    - user: pentaho
-    - group: pentaho
-    - archive_format: zip
-    - if_missing: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/lib/hsqldb.jar
+  cmd.run:
+    - name: wget https://sourceforge.net/projects/hsqldb/files/hsqldb/hsqldb_2_4/hsqldb-2.4.1.zip -O /tmp/hsqldb.zip && unzip -j /tmp/hsqldb.zip hsqldb-2.4.1/hsqldb/lib/hsqldb.jar -d {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/lib/ ; rm /tmp/hsqldb.zip
+    - runas: pentaho
+    - creates: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/lib/hsqldb.jar
+    - require:
+      - file: dir_opt_pentaho_tomcat
  
 
 #pentaho_jmx_exporter:
