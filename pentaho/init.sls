@@ -277,7 +277,7 @@ hsqldb_jar_download:
     - name: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/lib
     - source: https://sourceforge.net/projects/hsqldb/files/hsqldb/hsqldb_2_4/hsqldb-2.4.1.zip
     - source_hash: sha1=207a2adc299755220036e579e33126eef3d51946
-    - options: -j "hsqldb-2.4.1/hsqldb/lib/hsqldb.jar"
+    - options: '-j "hsqldb-2.4.1/hsqldb/lib/hsqldb.jar"'
     - user: pentaho
     - group: pentaho
     - archive_format: zip
