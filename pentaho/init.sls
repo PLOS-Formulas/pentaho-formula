@@ -281,6 +281,7 @@ hsqldb_jar_download:
     - user: pentaho
     - group: pentaho
     - archive_format: zip
+    - if_missing: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/lib/hsqldb.jar
  
 
 #pentaho_jmx_exporter:
