@@ -265,8 +265,8 @@ pentaho_tomcat_private_instance_init:
     - mode: 755
     - context:
         install_loc: {{ install_loc }}
-        pentaho_license_path: {{ install_loc }}/{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }}/.installedLicenses.xml
-        di_home: {{ install_loc }}/{{ version }}/server/pentaho-server/pentaho-solutions/system/kettle
+        pentaho_license_path: {{ install_loc }}/pentaho/{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }}/.installedLicenses.xml
+        di_home: {{ install_loc }}/pentaho/server/pentaho-server/pentaho-solutions/system/kettle
         java_loc: "/usr/lib/jvm/java-8-oracle"
         j_opts: |
           {{ config['j_opts'] }}
@@ -279,6 +279,13 @@ hsqldb_jar_download:
     - creates: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/lib/hsqldb.jar
     - require:
       - file: dir_opt_pentaho_tomcat
+
+environmental_variable_for_license:
+  file.append:
+    - name: /etc/environment
+    - text:
+      - PENTAHO_INSTALLED_LICENSE_PATH="{{ install_loc }}/pentaho/{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }}/.installedLicenses.xml"
+      - DI_HOME="{{ install_loc }}/pentaho/server/pentaho-server/pentaho-solutions/system/kettle"
  
 
 #pentaho_jmx_exporter:
