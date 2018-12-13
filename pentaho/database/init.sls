@@ -7,11 +7,10 @@ include:
   - percona.common
   - common.repos
 
-{% from 'lib/network.sls' import bind_ip0 with context %}
 {% if environment == 'vagrant' %}
 {% set mysql_ip = '127.0.0.1' %}
 {% else %}
-{% set mysql_ip = bind_ip0().rsplit('.', 3)[0] + '.%' %}
+{% set mysql_ip = salt.plosutil.get_canonical_ip().rsplit('.', 3)[0] + '.%' %}
 {% endif %}
 
 
