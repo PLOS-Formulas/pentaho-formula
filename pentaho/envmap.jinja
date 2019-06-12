@@ -8,7 +8,7 @@
             'jackrabbit': {
                 'mysql_user': 'jcr_user'
             },
-            'j_opts': '"-Djava.awt.headless=true -Xmx8192m -XX:-HeapDumpOnOutOfMemoryError -XX:MaxPermSize=256m -Dsun.net.inetaddr.ttl=30 -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Dpentaho.installed.licenses.file=$PENTAHO_INSTALLED_LICENSE_PATH -DDI_HOME=$DI_HOME"',
+            'j_opts': '"-Djava.awt.headless=true -Xms2048m -Xmx8192m -XX:-HeapDumpOnOutOfMemoryError -XX:MaxPermSize=256m -Dsun.net.inetaddr.ttl=30 -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Dpentaho.installed.licenses.file=$PENTAHO_INSTALLED_LICENSE_PATH -DDI_HOME=$DI_HOME"',
             'current_version': '8.1.0.0',
             'install_loc': '/opt/pentaho',
             'versions': {
@@ -61,12 +61,12 @@
             },
         'vagrant': {
                'current_version': '8.1.0.0',
-               'j_opts': '"-Djava.awt.headless=true -Xmx2048m -XX:-HeapDumpOnOutOfMemoryError -XX:MaxPermSize=256m -Dsun.net.inetaddr.ttl=30 -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Dpentaho.installed.licenses.file=$PENTAHO_INSTALLED_LICENSE_PATH -DDI_HOME=$DI_HOME"',
+               'j_opts': '"-Djava.awt.headless=true -Xms512m -Xmx2048m -XX:-HeapDumpOnOutOfMemoryError -XX:MaxPermSize=256m -Dsun.net.inetaddr.ttl=30 -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Dpentaho.installed.licenses.file=$PENTAHO_INSTALLED_LICENSE_PATH -DDI_HOME=$DI_HOME"',
                'mysql_host': 'pentaho-901.vagrant.local'
         },
         'dev': {
                'current_version': '8.1.0.0',
-               'j_opts': '"-Djava.awt.headless=true -Xmx2048m -XX:-HeapDumpOnOutOfMemoryError -XX:MaxPermSize=256m -Dsun.net.inetaddr.ttl=30 -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Dpentaho.installed.licenses.file=$PENTAHO_INSTALLED_LICENSE_PATH -DDI_HOME=$DI_HOME"',
+               'j_opts': '"-Djava.awt.headless=true -Xms512m  -Xmx2048m -XX:-HeapDumpOnOutOfMemoryError -XX:MaxPermSize=256m -Dsun.net.inetaddr.ttl=30 -Dsun.rmi.dgc.client.gcInterval=3600000 -Dsun.rmi.dgc.server.gcInterval=3600000 -Dpentaho.installed.licenses.file=$PENTAHO_INSTALLED_LICENSE_PATH -DDI_HOME=$DI_HOME"',
                'mysql_host': 'pentaho-dev1-db1.soma.plos.org',
         },
         'stage': {
