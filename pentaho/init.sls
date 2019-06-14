@@ -227,16 +227,6 @@ audit_sql_cp:
     - require:
       - archive: unzip_solutions
 
-audit_sql_cp:
-  file.managed:
-    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/pentaho-solutions/system/audit_sql.xml
-    - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/pentaho-solutions/system/audit_sql.xml
-    - user: pentaho
-    - group: pentaho
-    - mode: 664
-    - require:
-      - archive: unzip_solutions
-
 jackrabbit_repository_mysql_config:
   file.managed:
     - name: {{ install_loc }}/{{ version }}/server/pentaho-server/pentaho-solutions/system/jackrabbit/repository.xml
