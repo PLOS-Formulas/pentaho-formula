@@ -244,7 +244,7 @@ jackrabbit_repository_mysql_config:
 
 application_context_security_file:
   file.managed:
-    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/pentaho-solutions/system/system/dialects/mysql5/applicationContext-spring-security-hibernate.properties
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/pentaho-solutions/system/dialects/mysql5/applicationContext-spring-security-hibernate.properties
     - template: jinja
     - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/pentaho-solutions/system/dialects/mysql5/applicationContext-spring-security-hibernate.properties
     - user: pentaho
