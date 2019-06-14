@@ -246,7 +246,7 @@ application_context_security_file:
   file.managed:
     - name: {{ install_loc }}/{{ version }}/server/pentaho-server/pentaho-solutions/system/system/dialects/mysql5/applicationContext-spring-security-hibernate.properties
     - template: jinja
-    - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/pentaho-solutions/system/hdialects/mysql5/applicationContext-spring-security-hibernate.properties
+    - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/pentaho-solutions/system/dialects/mysql5/applicationContext-spring-security-hibernate.properties
     - user: pentaho
     - group: pentaho
     - mode: 664
