@@ -242,6 +242,38 @@ jackrabbit_repository_mysql_config:
         mysql_jcr_user: {{ mysql_jcr_user }}
         mysql_jcr_password: {{ salt.pillar.get('secrets:pentaho:jcr:mysql:password') }}
 
+application_context_security_file:
+  file.managed:
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/pentaho-solutions/system/system/dialects/mysql5/applicationContext-spring-security-hibernate.properties
+    - template: jinja
+    - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/pentaho-solutions/system/hdialects/mysql5/applicationContext-spring-security-hibernate.properties
+    - require:
+      - archive: unzip_solutions
+    - context: 
+        mysql_hibernate_host: {{ mysql_hibernate_host }}
+        mysql_hibernate_user: {{ mysql_hibernate_user }}
+        mysql_hibernate_password: {{ salt.pillar.get('secrets:pentaho:hibernate:mysql:password') }}
+
+jpivot_tags_mysql_sed:
+  file.replace:
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/pentaho-solutions/system/pentaho-jpivot-plugin-legacy/WEB-INF/jpivot/jpivot-tags.xml
+    - pattern: jdbc:mysql://localhost
+    - repl: jdbc:mysql://{{ mysql_jcr_host }}
+    - require:
+      - archive: unzip_solutions
+
+# import-export script
+import_export_file:
+  file.managed:
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/import-export.sh
+    - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/import-export.sh
+
+set-environments_for_import:
+  file.managed:
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/set-pentaho-env.sh
+    - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/set-pentaho-env.sh
+
+
 #jdbc driver
 jdbc_driver:
   file.symlink:
