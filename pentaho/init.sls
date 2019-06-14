@@ -247,6 +247,9 @@ application_context_security_file:
     - name: {{ install_loc }}/{{ version }}/server/pentaho-server/pentaho-solutions/system/system/dialects/mysql5/applicationContext-spring-security-hibernate.properties
     - template: jinja
     - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/pentaho-solutions/system/hdialects/mysql5/applicationContext-spring-security-hibernate.properties
+    - user: pentaho
+    - group: pentaho
+    - mode: 664
     - require:
       - archive: unzip_solutions
     - context: 
@@ -267,12 +270,17 @@ import_export_file:
   file.managed:
     - name: {{ install_loc }}/{{ version }}/server/pentaho-server/import-export.sh
     - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/import-export.sh
+    - user: pentaho
+    - group: pentaho
+    - mode: 664
 
 set-environments_for_import:
   file.managed:
     - name: {{ install_loc }}/{{ version }}/server/pentaho-server/set-pentaho-env.sh
     - source: salt://pentaho/conf/opt/pentaho/server/pentaho-server/set-pentaho-env.sh
-
+    - user: pentaho
+    - group: pentaho
+    - mode: 664
 
 #jdbc driver
 jdbc_driver:
