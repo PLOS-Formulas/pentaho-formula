@@ -328,6 +328,19 @@ mssql_jdbc_driver:
     - require:
       - file: dir_opt_pentaho_tomcat
 
+postgresql_jdbc_driver:
+  pkg.latest:
+    - name: libpostgresql-jdbc-java
+  file.symlink:
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/lib/postgresql.jar
+    - target: /usr/share/java/postgresql.jar 
+    - force: True
+    - user: pentaho
+    - group: pentaho
+    - mode: 644
+    - require:
+      - file: dir_opt_pentaho_tomcat
+
 environmental_variable_for_license:
   file.append:
     - name: /etc/environment
