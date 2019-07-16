@@ -320,6 +320,27 @@ hsqldb_jar_download:
     - require:
       - file: dir_opt_pentaho_tomcat
 
+mssql_jdbc_driver:
+  cmd.run:
+    - name: wget -O- https://download.microsoft.com/download/4/D/C/4DCD85FA-0041-4D2E-8DD9-833C1873978C/sqljdbc_7.2.2.0_enu.tar.gz | tar --strip-components=2 -C {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/lib/ -xvzf - sqljdbc_7.2/enu/mssql-jdbc-7.2.2.jre8.jar
+    - runas: pentaho
+    - creates: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/lib/mssql-jdbc-7.2.2.jre8.jar
+    - require:
+      - file: dir_opt_pentaho_tomcat
+
+postgresql_jdbc_driver:
+  pkg.latest:
+    - name: libpostgresql-jdbc-java
+  file.symlink:
+    - name: {{ install_loc }}/{{ version }}/server/pentaho-server/tomcat/lib/postgresql.jar
+    - target: /usr/share/java/postgresql.jar 
+    - force: True
+    - user: pentaho
+    - group: pentaho
+    - mode: 644
+    - require:
+      - file: dir_opt_pentaho_tomcat
+
 environmental_variable_for_license:
   file.append:
     - name: /etc/environment
