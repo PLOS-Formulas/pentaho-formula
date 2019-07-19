@@ -18,7 +18,7 @@ pentaho_cnf_mysql:
   file.managed:
     - template: jinja
     - name: /etc/mysql/conf.d/pentaho.cnf
-    - source: salt://pentaho/conf/etc/mysql/conf.d/pentaho.cnf
+    - source: salt://pentaho/conf/etc/mysql/conf.d/pentaho.conf
 
 # replacement instead of running the create_jcr_mysql.sql (https://help.pentaho.com/Documentation/8.1/Setup/Installation/Manual/MySQL_Repository)
 jcr_db:
