@@ -341,6 +341,13 @@ postgresql_jdbc_driver:
     - require:
       - file: dir_opt_pentaho_tomcat
 
+pentaho_user_home:
+  file.directory:
+    - name: /home/pentaho
+    - user: pentaho
+    - group: pentaho
+    - mode: 755
+
 environmental_variable_for_license:
   file.append:
     - name: /etc/environment
