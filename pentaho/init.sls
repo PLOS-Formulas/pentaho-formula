@@ -354,7 +354,14 @@ environmental_variable_for_license:
     - text:
       - PENTAHO_INSTALLED_LICENSE_PATH="{{ install_loc }}/pentaho/{{ config['versions'][version]['license-installer.zip']['unzip_loc'] }}/.installedLicenses.xml"
       - DI_HOME="{{ install_loc }}/pentaho/server/pentaho-server/pentaho-solutions/system/kettle"
- 
+
+karaf_cache_folder:
+  file.directory:
+    - name: {{ install_loc }}pentaho/server/pentaho-server/pentaho-solutions/system/karaf/caches/default
+    - makedirs: True
+    - user: pentaho
+    - group: pentaho
+    - mode: 755
 
 #pentaho_jmx_exporter:
 #  plos_consul.advertise:
