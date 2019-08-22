@@ -357,7 +357,7 @@ environmental_variable_for_license:
 
 karaf_cache_folder:
   file.directory:
-    - name: {{ install_loc }}pentaho/server/pentaho-server/pentaho-solutions/system/karaf/caches/default
+    - name: {{ install_loc }}/pentaho/server/pentaho-server/pentaho-solutions/system/karaf/caches/default
     - makedirs: True
     - user: pentaho
     - group: pentaho
